@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}View paste{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style>
+    {{ get_style() | safe }}
+    </style>
+{% endblock %}
+
+{% block content %}
+Language: {{ language }}
+
+<br />
+
+<div class="highlight">
+    {{ highlight(language, paste.content) | safe }}
+</div>
+{% endblock %}
