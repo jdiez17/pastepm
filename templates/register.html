@@ -13,10 +13,15 @@
     {% endif %}
 {% endwith %}
 
+{% if payment %}
+<strong>Note</strong>: after this step you'll be able to check out with paypal.
+{% endif %}
+
 <form action="register" method="post">
     <input type="text" name="username"><br />
     <input type="password" name="password"><br />
     <input type="submit" value="Go &raquo;">
 </form>
+
 
 {% endblock %}

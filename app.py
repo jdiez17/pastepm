@@ -6,7 +6,9 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 from pastepm.database import db_session
-from pastepm.views import PastePost, PasteViewWithExtension, PasteViewWithoutExtension, RegisterView
+from pastepm.views import PastePost, PasteViewWithExtension, PasteViewWithoutExtension
+from pastepm.views import RegisterView
+from pastepm.views import PayPalStart, PayPalConfirm, PayPalDo, PayPalStatus
 from pastepm.config import config
 
 import os
@@ -56,7 +58,24 @@ url_mapping = {
     'register': {
         'url': '/register',
         'cls': RegisterView
+    },
+    'paypal_start': {
+        'url': '/paypal/start',
+        'cls': PayPalStart
+    },
+    'paypal_confirm': {
+        'url': '/paypal/confirm',
+        'cls': PayPalConfirm
+    },
+    'paypal_do': {
+        'url': '/paypal/do/<string:token>',
+        'cls': PayPalDo
+    },
+    'paypal_status': {
+        'url': '/paypal/status/<string:token>',
+        'cls': PayPalStatus
     }
+
 }
 
 for view in url_mapping:
@@ -66,5 +85,5 @@ for view in url_mapping:
 app.secret_key = config.get('security', 'secret_key')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8337, debug=True)
+    app.run(host='127.0.0.11', port=8000, debug=True)
 

@@ -41,3 +41,24 @@ class User(Base):
     def check_password(self, password):
         return self._get_hash(password) == self.pwdhash
 
+class Purchase(Base):
+    __tablename__ = 'purchases'
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer)
+    token = Column(String(40))
+    completed = Column(Boolean)
+    status = Column(String(20))
+    amount = Column(String(10))
+
+    def __init__(self, uid, token, amount):
+        self.uid = uid
+        self.token = token
+        self.amount = amount
+
+        self.completed = False
+        self.status = "pending"
+    
+    def confirm_payment(self):
+        self.completed = True
+        self.status = "paid"
+         

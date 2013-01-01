@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('paypal_start') }}" method="POST" name="payment">
+    <input type=text" name="amt"> <br />
+
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" value="submit">
+</form>
+{% endblock %}

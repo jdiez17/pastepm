@@ -1,0 +1,9 @@
+
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+Everything looks good! <br />
+
+<a href="{{ url_for('paypal_do', token=token) }}">Click here to confirm.</a>
+{% endblock %}
