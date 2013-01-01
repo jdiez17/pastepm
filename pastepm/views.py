@@ -1,4 +1,4 @@
-from flask.views import View, MethodView
+from flask.views import MethodView
 from flask import redirect, url_for, request, render_template, flash, abort
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
@@ -10,10 +10,8 @@ from pastepm.cache import memoize
 
 import sqlalchemy
 
-class PastePost(View):
-    methods = ["POST"]
-    
-    def dispatch_request(self):
+class PastePost(MethodView):
+    def post(self):
         if "content" not in request.form.keys():
             return redirect(url_for('index')) 
 
@@ -27,7 +25,7 @@ class PastePost(View):
 
         return redirect(url_for('view', id=encode_id(p.id), extension=extension))
 
-class PasteView(View):
+class PasteView(MethodView):
     def _get_content(self, id):
         id = decode_id(id)
         paste = Paste.query.get(id)
@@ -43,7 +41,7 @@ class PasteView(View):
         return lexer
 
     @memoize(time=3600)
-    def dispatch_request(self, id, extension="txt"):
+    def get(self, id, extension="txt"):
         paste = self._get_content(id)
 
         if paste == None:
