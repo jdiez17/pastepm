@@ -1,5 +1,5 @@
 from flask.views import MethodView
-from flask import redirect, url_for, request, render_template, flash, abort
+from flask import redirect, url_for, request, render_template, flash, abort, session
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
 
@@ -7,6 +7,7 @@ from pastepm.models import Paste, User
 from pastepm.utils import decode_id, encode_id, guess_extension
 from pastepm.database import db_session
 from pastepm.cache import memoize
+from pastepm.payment import using_paypal, paypal
 
 import sqlalchemy
 
@@ -80,11 +81,16 @@ class RegisterView(MethodView):
             return redirect(url_for('register'))
 
         try:
-            u = User(username, password)
+            u = User(username, password, using_paypal)
             db_session.add(u)
             db_session.commit()
         except sqlalchemy.exc.IntegrityError:
             flash("Username taken", "error")
             return redirect(url_for('register'))
 
-        return "OK I guess"
+        session['payment_target_id'] = u.id
+
+        if using_paypal:
+            return render_template("checkout.html")
+        else:
+            return render_template("confirm.html") 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship, backref
 from pastepm.database import Base, using_redis, r
 from pastepm.config import config
@@ -24,6 +24,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(30), unique=True)
     pwdhash = Column(String(40))
+    activated = Column(Boolean)
 
     @staticmethod
     def _get_hash(plain):
@@ -32,9 +33,10 @@ class User(Base):
 
         return h.hexdigest()
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, payment_enabled=False):
         self.username = username
         self.pwdhash = self._get_hash(password) 
+        self.activated = not payment_enabled
        
     def check_password(self, password):
         return self._get_hash(password) == self.pwdhash
