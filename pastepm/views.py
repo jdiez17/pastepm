@@ -61,6 +61,12 @@ class PasteView(MethodView):
 
         return render_template("index.html", paste=paste, language=language, id=id)
 
+class ForkView(PasteView):
+    @memoize(time=3600)
+    def get(self, id, extension="txt"):
+        paste = self._get_content(id)
+        return render_template("index.html", paste=paste, fork=True)
+
 class RawView(PasteView):
     @memoize(time=3600)
     def get(self, id, extension="txt"):

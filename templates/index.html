@@ -15,7 +15,7 @@
 <body>
 	<div class="sidebar color">
 		<div class="menu actions">
-			{% if paste %}
+			{% if paste and not fork %}
 			<a href="#" id="button-save-disabled" class="off" data-tooltip="Save"><img src="{{ url_for('static', filename='includes/images/save.png') }}" /></a>
 			<a href="/fork/{{ id }}" id="button-duplicate" class="tooltip" data-tooltip="Fork"><img src="{{ url_for('static', filename='includes/images/duplicate.png') }}" /></a>
 			<a href="/raw/{{ id }}" id="button-raw" class="tooltip" data-tooltip="See&nbsp;raw"><img src="{{ url_for('static', filename='includes/images/raw.png') }}" /></a>
@@ -47,7 +47,7 @@
                   {% if language %}editor.getSession().setMode("ace/mode/{{ language }}");
                   {% else %}editor.getSession().setMode("ace/mode/javascript");
                   {% endif %}
-                  {% if paste %}editor.setReadOnly(true); {% endif %}
+                  {% if paste and not fork %}editor.setReadOnly(true); {% endif %}
 		</script>
 
 
