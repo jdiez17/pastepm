@@ -41,6 +41,11 @@ class PasteView(MethodView):
 
         return lexer
 
+    def _fix_language(self, old_l):
+        return {
+            'js': 'javascript'
+        }.get(old_l, old_l)
+
     @memoize(time=3600)
     def get(self, id, extension="txt"):
         paste = self._get_content(id)
@@ -50,6 +55,7 @@ class PasteView(MethodView):
 
         try:
             language = self.get_language(id, paste, extension)
+            language = self._fix_language(language)
         except ClassNotFound:
             return redirect(url_for('view', id=id, extension="txt"))
 
