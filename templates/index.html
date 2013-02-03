@@ -1,10 +1,57 @@
-{% extends "base.html" %}
-{% block title %}Index{% endblock %}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Paste.pm</title>
+	<meta name="description" content="" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- <link rel="stylesheet" href="style.css" media="screen" /> -->
+	<link rel="stylesheet/less" type="text/css" href="{{ url_for('static', filename='style.less') }}" />
+	<link rel="icon" href="includes/images/favicon.png" />
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="{{ url_for('static', filename='js/less-1.3.3.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</head>
+<body>
+	<div class="sidebar color">
+		<div class="menu actions">
+			{% if paste %}
+			<a href="#" id="button-save-disabled" class="off" data-tooltip="Save"><img src="{{ url_for('static', filename='includes/images/save.png') }}" /></a>
+			<a href="/fork/{{ id }}" id="button-duplicate" class="tooltip" data-tooltip="Fork"><img src="{{ url_for('static', filename='includes/images/duplicate.png') }}" /></a>
+			<a href="/raw/{{ id }}" id="button-raw" class="tooltip" data-tooltip="See&nbsp;raw"><img src="{{ url_for('static', filename='includes/images/raw.png') }}" /></a>
+			{% else %}
+			<a href="#" id="button-save" class="tooltip" data-tooltip="Save"><img src="{{ url_for('static', filename='includes/images/save.png') }}" /></a>
+			<a href="#" id="button-duplicate" class="off" data-tooltip="Fork"><img src="{{ url_for('static', filename='includes/images/duplicate.png') }}" /></a>
+			<a href="#" id="button-raw" class="off" data-tooltip="See&nbsp;raw"><img src="{{ url_for('static', filename='includes/images/raw.png') }}" /></a>
+			{% endif %}
+		</div>
+		<div class="menu site">
+			<a href="/"><img src="{{ url_for('static', filename='includes/images/logo.png') }}" /></a>
+		</div>
+	</div>
+	<div class="inter">
 
-{% block content %}
-<form action="post" method="post">
-    <textarea name="content">
-    </textarea> <br />
-    <input type="submit" value="Go &raquo;">
-</form>
-{% endblock %}
+		<div class="color-scheme hidden">
+		</div>
+
+	</div>
+	<div class="main">
+
+
+<div id="editor">{% if paste %}{{ paste }}{% endif %}</div>
+		    
+		<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+		    var editor = ace.edit("editor");
+		    editor.setTheme("ace/theme/tomorrow_night");
+                  {% if language %}editor.getSession().setMode("ace/mode/{{ language }}");
+                  {% else %}editor.getSession().setMode("ace/mode/javascript");
+                  {% endif %}
+                  {% if paste %}editor.setReadOnly(true); {% endif %}
+		</script>
+
+
+
+	</div>
+</body>
+</html>

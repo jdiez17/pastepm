@@ -6,7 +6,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 from pastepm.database import db_session
-from pastepm.views import PastePost, PasteViewWithExtension, PasteViewWithoutExtension
+from pastepm.views import PastePost, PasteViewWithExtension, PasteViewWithoutExtension, RawView
 from pastepm.views import RegisterView
 from pastepm.views import PayPalStart, PayPalConfirm, PayPalDo, PayPalStatus
 from pastepm.config import config
@@ -50,6 +50,10 @@ url_mapping = {
     'view': {
         'url': '/<string:id>.<string:extension>', 
         'cls': PasteViewWithExtension
+    },
+    'raw': {
+        'url': '/raw/<string:id>',
+        'cls': RawView
     },
     'view2': {
         'url': '/<string:id>',

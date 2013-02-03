@@ -24,7 +24,7 @@ class PastePost(MethodView):
 
         extension = guess_extension(content)
 
-        return redirect(url_for('view', id=encode_id(p.id), extension=extension))
+        return url_for('view', id=encode_id(p.id), extension=extension)
 
 class PasteView(MethodView):
     def _get_content(self, id):
@@ -53,7 +53,13 @@ class PasteView(MethodView):
         except ClassNotFound:
             return redirect(url_for('view', id=id, extension="txt"))
 
-        return render_template("paste.html", paste=paste, language=language)
+        return render_template("index.html", paste=paste, language=language, id=id)
+
+class RawView(PasteView):
+    @memoize(time=3600)
+    def get(self, id, extension="txt"):
+        paste = self._get_content(id)
+        return "<pre>%s</pre>" % paste
 
 class PasteViewWithExtension(PasteView):
     def get_language(self, id, content, extension="txt"):
