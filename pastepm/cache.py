@@ -10,7 +10,7 @@ def memoize(f=None, time=0):
     def wrap(*args, **kwargs):
         if using_redis:
             h = hashlib.sha1()
-            h.update(str(kwargs))
+            h.update(str(type(args[0])) + str(kwargs))
             key = "pastepm.cache.%s" % h.hexdigest()
 
             if r.exists(key):

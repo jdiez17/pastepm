@@ -42,6 +42,14 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.errorhandler(404)
+def notfound(e):
+    return redirect('/')
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return redirect('/')
+
 url_mapping = {
     'post': {
         'url': '/post', 
@@ -93,5 +101,5 @@ for view in url_mapping:
 app.secret_key = config.get('security', 'secret_key')
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.11', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8123, debug=True)
 

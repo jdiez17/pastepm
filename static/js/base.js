@@ -22,4 +22,5 @@ $(document).ready(function() {
 			}
 		});
 	});
+    $('.ace_print_margin').remove();
 });

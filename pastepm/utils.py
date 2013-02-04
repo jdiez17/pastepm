@@ -7,8 +7,12 @@ def guess_extension(content):
     try:
         extension = lexer.filenames[0][2:]
     except IndexError:
-        extension = lexer.alias_filenames[0][2:]
-
+        try:
+            extension = lexer.alias_filenames[0][2:]
+        except:
+            extension = "txt"
+    
+    if extension.find("."): return "txt"
     return extension
 
 def encode_id(num):

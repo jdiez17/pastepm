@@ -43,7 +43,12 @@ class PasteView(MethodView):
 
     def _fix_language(self, old_l):
         return {
-            'js': 'javascript'
+            'js': 'javascript',
+            'c': 'c_cpp',
+            'cpp': 'c_cpp',
+            'go': 'golang',
+            'minid': 'markdown',
+            'bash': 'sh'
         }.get(old_l, old_l)
 
     @memoize(time=3600)
@@ -71,7 +76,7 @@ class RawView(PasteView):
     @memoize(time=3600)
     def get(self, id, extension="txt"):
         paste = self._get_content(id)
-        return "<pre>%s</pre>" % paste
+        return render_template("raw.html", paste=paste) 
 
 class PasteViewWithExtension(PasteView):
     def get_language(self, id, content, extension="txt"):
