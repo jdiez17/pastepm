@@ -4,11 +4,12 @@ from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
 
 from pastepm.models import Paste, User, Purchase
-from pastepm.utils import decode_id, encode_id, guess_extension
+from pastepm.utils import decode_id, encode_id
 from pastepm.database import db_session
 from pastepm.cache import memoize
 from pastepm.payment import using_paypal, paypal
 
+from pastepm.detection import language_detect, get_language_from_extension
 import sqlalchemy
 
 class PastePost(MethodView):
@@ -22,7 +23,7 @@ class PastePost(MethodView):
         db_session.add(p)
         db_session.commit()
 
-        extension = guess_extension(content)
+        extension = language_detect(content)[1]
 
         return url_for('view', id=encode_id(p.id), extension=extension)
 
@@ -80,13 +81,12 @@ class RawView(PasteView):
 
 class PasteViewWithExtension(PasteView):
     def get_language(self, id, content, extension="txt"):
-        filename = "%s.%s" % (id, extension) 
-        return self._get_lexer(filename).aliases[0]
+        return get_language_from_extension(extension)
 
 class PasteViewWithoutExtension(PasteView):
     def get_language(self, id, content, extension="txt"):
-        extension = guess_extension(str(content))
-        return self._get_lexer("%s.%s" % (id, extension)).aliases[0] 
+        extension = language_detect(str(content))[1]
+        return get_language_from_extension(extension) 
 
 class RegisterView(MethodView):
     def get(self):

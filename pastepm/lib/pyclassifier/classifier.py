@@ -57,3 +57,6 @@ class Classifier(object):
     def __setstate__(self, state):
         self._training_items = state['training_items']
         self._data = state['data']
+
+    def get_classes(self):
+        return self._training_items.keys()
